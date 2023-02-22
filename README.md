@@ -1,4 +1,4 @@
-# Cypress-tests-optimization
+# Cypress-tests-optimization 
 
 Welcome to Cypress Test Optimization Repository!
 
@@ -8,4 +8,4 @@ With the help of our code examples, you'll learn how to write more efficient tes
 
 My goal is to provide you with a comprehensive resource to help you get the most out of your Cypress tests. Whether you're a seasoned Cypress user or just getting started, I'm confident that this repository will help you write better, more reliable tests.
 
-So take a look around, explore our code examples, and start optimizing your Cypress tests today!
+So take a look around, explore our code examples, and start optimizing your Cypress tests today! :octocat:
