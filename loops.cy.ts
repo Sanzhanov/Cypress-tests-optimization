@@ -22,23 +22,14 @@ for (const { input, expectedOutput } of testCases) {
     cy.get('#output').should('have.text', expectedOutput)
 }
 
-//3. Waiting for an element to appear multiple times
-let numChecks: number = 5;
-let delay: number = 1000;
-
-for (let i: number = 0; i < numChecks; i++) {
-    cy.get('#element').should('be.visible');
-    cy.wait(delay);
-}
-
-//4. Navigating through multiple pages
+//3. Navigating through multiple pages
 const pages = ['/', '/about', '/contact'];
 pages.forEach((page) => {
     cy.visit(page);
     cy.get('h1').should('have.text', 'Page Header');
 });
 
-//5. Testing multiple user accounts or roles
+//4. Testing multiple user accounts or roles
 interface User {
     username: string;
     password: string;
@@ -61,7 +52,7 @@ describe('Testing multiple user accounts or roles', () => {
     }
 });
 
-//6. Running the same test with different configurations
+//5. Running the same test with different configurations
 interface Config {
     environment: string;
     baseUrl: string;
@@ -97,7 +88,7 @@ for (const config of configs) {
     });
 }
 
-//7. Dynamically generating test data
+//6. Dynamically generating test data
 interface TestData {
     input: string;
     expectedOutput: string;
@@ -125,7 +116,7 @@ Object.keys(testData).forEach((key) => {
     });
 });
 
-//8. Iterating through a set of test steps
+//7. Iterating through a set of test steps
 const steps = [
     { action: 'click', selector: '#button-1' },
     { action: 'type', selector: 'input[name="name"]', value: 'Alice' },
@@ -143,7 +134,7 @@ steps.forEach((step) => {
     });
 });
 
-//9. Testing the same functionality or behavior across different environments, such as multiple screen resolutions or browser types
+//8. Testing the same functionality or behavior across different environments, such as multiple screen resolutions or browser types
 interface Environment {
     name: string;
     width: number;
@@ -165,3 +156,12 @@ describe('Testing the same functionality or behavior across different environmen
         });
     });
 });
+
+//9. Waiting for an element to appear multiple times
+const MAX_RETRIES: number = 5;
+let retries: number = 0;
+
+while (retries < MAX_RETRIES) {
+    cy.get('#element').should('exist');
+    retries++;
+}
