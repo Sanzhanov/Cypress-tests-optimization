@@ -10,6 +10,20 @@ function validateNestedElements(element: JQuery<Element>): void {
     });
 }
 
+//Pagination
+const visitTextPageIfPossible = () => {
+    cy.get('.paginationjs-next').then(($next) => {
+        if ($next.hasClass('disabled')) {
+            // we are done - we are on the last page
+            return
+        }
+
+        cy.wait(500) // just for clarity
+        cy.get('.paginationjs-next').click()
+        visitTextPageIfPossible()
+    })
+}
+
 //2. Handling asynchronous operations
 const clickElement = (selector: string, retries = 3): void => {
     if (retries === 0) {
@@ -100,4 +114,54 @@ function submitForm(): void {
 
 fillFormPage(0);
 
-//5.
+//5. Dynamic data handling
+interface ItemData {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+}
+
+function checkAllItems(index: number = 0): void {
+    cy.get('.item-list') // select the container element for the list of items
+        .find('.item') // select all the individual item elements
+        .eq(index) // select the item at the current index
+        .then($item => {
+            const itemData: ItemData = {
+                id: $item.attr('data-id'),
+                name: $item.find('.name').text(),
+                description: $item.find('.description').text(),
+                price: Number($item.find('.price').text()),
+            };
+            // perform some assertions on the item data
+            expect(itemData.name).to.not.be.empty;
+            expect(itemData.price).to.be.greaterThan(0);
+
+            // recursively call the function for the next index
+            checkAllItems(index + 1);
+        });
+}
+
+//6. Implementing retries
+function testLogin(maxAttempts: number, currentAttempt: number = 1) {
+    cy.visit('/login')
+    cy.get('#username').type('myusername')
+    cy.get('#password').type('mypassword')
+    cy.get('#login-button').click()
+    cy.url().should('include', '/dashboard')
+        .then(() => {
+            // Test passed, do nothing
+        })
+        .catch(() => {
+            if (currentAttempt < maxAttempts) {
+                // Retry the test
+                testLogin(maxAttempts, currentAttempt + 1)
+            } else {
+                // Max attempts reached, fail the test
+                cy.wrap(false).should('be.true')
+            }
+        })
+}
+
+testLogin(3)
+
