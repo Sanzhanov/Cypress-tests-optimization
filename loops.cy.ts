@@ -155,13 +155,4 @@ describe('Testing the same functionality or behavior across different environmen
             cy.get('.content').should('be.visible');
         });
     });
-});
-
-//9. Waiting for an element to appear multiple times
-const MAX_RETRIES: number = 5;
-let retries: number = 0;
-
-while (retries < MAX_RETRIES) {
-    cy.get('#element').should('exist');
-    retries++;
-}
+})
